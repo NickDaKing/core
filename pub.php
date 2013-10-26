@@ -22,9 +22,16 @@
     }
 
     if (file_exists($have) && ! is_dir($have)) {
+
+        header('Content-Description: File Transfer');
         header('Content-Type: ' . mime_content_type($have));
         header('Content-Disposition: attachment; filename="' . basename($have) . '"');
-        readfile($have);
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header("Pragma: public");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header('Content-Length:' . filesize($have));
+        header("X-Sendfile: " . $have);
     } else {
         header('HTTP/1.0 404 Not Found');
         not_found();
